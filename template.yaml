@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Slack is app
+
+Globals:
+  Function:
+    Runtime: python3.7
+    Timeout: 15
+    MemorySize: 256
+    Environment:
+      Variables:
+        Bucket_Name:  *****
+        Dynamo_Table:  !Ref  SlackDynamo
+        Oauth_Token:  *****
+        Slack_Api_Url :  https://slack.com/api/
+        Webhook_url :  https://hooks.slack.com/services/*****
+Resources:
+  Slackbobobo:
+    Type:  AWS::Serverless::Function
+    Properties:
+      CodeUri:  'Slack_app/'
+      Role:  arn:aws:iam::4*****:role/lambda_basic_execution
+      Handler:  slack_bobobo.lambda_handler
+      Events:
+        Api:
+          Type:  Api
+          Properties:  
+            Path:  /images
+            Method:  post
+  SlackDynamo:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: Imageid
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
